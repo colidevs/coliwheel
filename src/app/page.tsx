@@ -70,7 +70,9 @@ export default function HomePage() {
         {Personas.map((persona, index) => (
           <motion.div
             key={persona.id}
-            className={`flex h-16 w-16 items-center justify-center text-white shadow-xl ${colors[index % colors.length]}`}
+            className={`flex h-16 w-16 items-center justify-center text-white shadow-xl ${
+              colors[index % colors.length]
+            } ${persona.nombre === ganador.nombre ? "shadow-cyan-500/50" : ""}`}
           >
             {persona.nombre}
           </motion.div>
@@ -83,7 +85,7 @@ export default function HomePage() {
       >
         Girar
       </button>
-      <p className="mt-4 text-lg font-bold ">Ganador: {ganador.nombre}</p>
+      <p className="mt-4 text-lg font-bold">Ganador: {ganador.nombre}</p>
     </div>
   );
 }
