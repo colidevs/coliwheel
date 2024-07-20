@@ -6,19 +6,6 @@ import ParticipantCard from "./ParticipantCard";
 
 import {Button} from "@/components/ui/button";
 
-const Personas: Opcion[] = [
-  {id: 0, nombre: "Martin"},
-  {id: 1, nombre: "Ana"},
-  {id: 2, nombre: "Luis"},
-  {id: 3, nombre: "Carlos"},
-  {id: 4, nombre: "Maria"},
-  {id: 5, nombre: "Sofia"},
-  {id: 6, nombre: "Jorge"},
-  {id: 7, nombre: "Laura"},
-  {id: 8, nombre: "Pedro"},
-  {id: 9, nombre: "Elena"},
-];
-
 interface Opcion {
   id: number;
   nombre: string;
@@ -31,25 +18,52 @@ const getRandomColor = (): string => {
 };
 
 export default function HomePage() {
-  const ValorInicial: Opcion = Personas[0];
+  const [Participantes, setParticipantes] = useState<Opcion[]>([
+    {id: 0, nombre: "Martin"},
+    {id: 1, nombre: "Ana"},
+    {id: 2, nombre: "Luis"},
+    {id: 3, nombre: "Carlos"},
+    {id: 4, nombre: "Maria"},
+    {id: 5, nombre: "Sofia"},
+    {id: 6, nombre: "Jorge"},
+    {id: 7, nombre: "Laura"},
+    {id: 8, nombre: "Pedro"},
+    {id: 9, nombre: "Elena"},
+  ]);
+  const ValorInicial: Opcion = Participantes[0];
   const [ganador, setGanador] = useState<Opcion>(ValorInicial);
   const [colores, setColores] = useState<{[key: number]: string}>({});
+  const [nombreNuevo, setNombreNuevo] = useState<string>("");
 
   useEffect(() => {
     const coloresGenerados: {[key: number]: string} = {};
 
-    Personas.forEach((persona) => {
-      coloresGenerados[persona.id] = getRandomColor();
+    Participantes.forEach((participante) => {
+      coloresGenerados[participante.id] = getRandomColor();
     });
     setColores(coloresGenerados);
-  }, []);
+  }, [Participantes]);
 
   const ElegirGanador = () => {
-    const randomId = Math.floor(Math.random() * Personas.length);
-    const ganador: Opcion | undefined = Personas.find((persona) => persona.id == randomId);
+    const randomId = Math.floor(Math.random() * Participantes.length);
+    const ganador: Opcion | undefined = Participantes.find(
+      (participante) => participante.id == randomId,
+    );
 
     if (!ganador) return;
     setGanador(ganador);
+  };
+
+  const AgregarParticipante = () => {
+    if (nombreNuevo.trim() === "") return;
+    const nuevoParticipante: Opcion = {
+      id: Participantes.length,
+      nombre: nombreNuevo,
+    };
+
+    setParticipantes([...Participantes, nuevoParticipante]);
+    setColores({...colores, [nuevoParticipante.id]: getRandomColor()});
+    setNombreNuevo("");
   };
 
   return (
@@ -59,18 +73,24 @@ export default function HomePage() {
           className="border p-2 text-black"
           placeholder="Nombre del participante"
           type="text"
+          value={nombreNuevo}
+          onChange={(e) => setNombreNuevo(e.target.value)}
         />
-        <button className="rounded bg-blue-500 px-4 py-2 text-white" type="button">
+        <button
+          className="rounded bg-blue-500 px-4 py-2 text-white"
+          type="button"
+          onClick={AgregarParticipante}
+        >
           Agregar
         </button>
       </div>
       <div className="grid grid-cols-5 gap-6">
-        {Personas.map((persona) => (
+        {Participantes.map((participante) => (
           <ParticipantCard
-            key={persona.id}
-            color={colores[persona.id]}
-            isSelected={persona.id === ganador.id}
-            nombre={persona.nombre}
+            key={participante.id}
+            color={colores[participante.id]}
+            isSelected={participante.id === ganador.id}
+            nombre={participante.nombre}
           />
         ))}
       </div>
