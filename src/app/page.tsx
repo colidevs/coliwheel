@@ -9,6 +9,7 @@ import {Button} from "@/components/ui/button";
 interface Opcion {
   id: number;
   nombre: string;
+  color: string;
 }
 
 const getRandomColor = (): string => {
@@ -19,30 +20,20 @@ const getRandomColor = (): string => {
 
 export default function HomePage() {
   const [Participantes, setParticipantes] = useState<Opcion[]>([
-    {id: 0, nombre: "Martin"},
-    {id: 1, nombre: "Ana"},
-    {id: 2, nombre: "Luis"},
-    {id: 3, nombre: "Carlos"},
-    {id: 4, nombre: "Maria"},
-    {id: 5, nombre: "Sofia"},
-    {id: 6, nombre: "Jorge"},
-    {id: 7, nombre: "Laura"},
-    {id: 8, nombre: "Pedro"},
-    {id: 9, nombre: "Elena"},
+    {id: 0, nombre: "Martin", color: getRandomColor()},
+    {id: 1, nombre: "Ana", color: getRandomColor()},
+    {id: 2, nombre: "Luis", color: getRandomColor()},
+    {id: 3, nombre: "Carlos", color: getRandomColor()},
+    {id: 4, nombre: "Maria", color: getRandomColor()},
+    {id: 5, nombre: "Sofia", color: getRandomColor()},
+    {id: 6, nombre: "Jorge", color: getRandomColor()},
+    {id: 7, nombre: "Laura", color: getRandomColor()},
+    {id: 8, nombre: "Pedro", color: getRandomColor()},
+    {id: 9, nombre: "Elena", color: getRandomColor()},
   ]);
   const ValorInicial: Opcion = Participantes[0];
   const [ganador, setGanador] = useState<Opcion>(ValorInicial);
-  const [colores, setColores] = useState<{[key: number]: string}>({});
   const [nombreNuevo, setNombreNuevo] = useState<string>("");
-
-  useEffect(() => {
-    const coloresGenerados: {[key: number]: string} = {};
-
-    Participantes.forEach((participante) => {
-      coloresGenerados[participante.id] = getRandomColor();
-    });
-    setColores(coloresGenerados);
-  }, [Participantes]);
 
   const ElegirGanador = () => {
     const randomId = Math.floor(Math.random() * Participantes.length);
@@ -59,10 +50,10 @@ export default function HomePage() {
     const nuevoParticipante: Opcion = {
       id: Participantes.length,
       nombre: nombreNuevo,
+      color: getRandomColor(),
     };
 
     setParticipantes([...Participantes, nuevoParticipante]);
-    setColores({...colores, [nuevoParticipante.id]: getRandomColor()});
     setNombreNuevo("");
   };
 
@@ -88,7 +79,7 @@ export default function HomePage() {
         {Participantes.map((participante) => (
           <ParticipantCard
             key={participante.id}
-            color={colores[participante.id]}
+            color={participante.color}
             isSelected={participante.id === ganador.id}
             nombre={participante.nombre}
           />
