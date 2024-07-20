@@ -54,6 +54,16 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col items-center space-y-6 p-5">
+      <div className="flex space-x-4">
+        <input
+          className="border p-2 text-black"
+          placeholder="Nombre del participante"
+          type="text"
+        />
+        <button className="rounded bg-blue-500 px-4 py-2 text-white" type="button">
+          Agregar
+        </button>
+      </div>
       <div className="grid grid-cols-5 gap-6">
         {Personas.map((persona) => (
           <ParticipantCard
@@ -62,14 +72,6 @@ export default function HomePage() {
             isSelected={persona.id === ganador.id}
             nombre={persona.nombre}
           />
-          // <motion.div
-          //   key={persona.id}
-          //   className={`flex h-16 w-16 items-center justify-center text-white shadow-xl ${
-          //     colors[index % colors.length]
-          //   } ${persona.nombre === ganador.nombre ? "shadow-cyan-500/50" : ""}`}
-          // >
-          //   {persona.nombre}
-          // </motion.div>
         ))}
       </div>
       <button
