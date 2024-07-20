@@ -1,7 +1,6 @@
 "use client";
-
 import {motion} from "framer-motion";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 
 import ParticipantCard from "./ParticipantCard";
 
@@ -34,6 +33,16 @@ const getRandomColor = (): string => {
 export default function HomePage() {
   const ValorInicial: Opcion = Personas[0];
   const [ganador, setGanador] = useState<Opcion>(ValorInicial);
+  const [colores, setColores] = useState<{[key: number]: string}>({});
+
+  useEffect(() => {
+    const coloresGenerados: {[key: number]: string} = {};
+
+    Personas.forEach((persona) => {
+      coloresGenerados[persona.id] = getRandomColor();
+    });
+    setColores(coloresGenerados);
+  }, []);
 
   const ElegirGanador = () => {
     const randomId = Math.floor(Math.random() * Personas.length);
@@ -49,8 +58,8 @@ export default function HomePage() {
         {Personas.map((persona) => (
           <ParticipantCard
             key={persona.id}
-            color={getRandomColor()}
-            isSelected={persona.nombre === persona.nombre}
+            color={colores[persona.id]}
+            isSelected={persona.id === ganador.id}
             nombre={persona.nombre}
           />
           // <motion.div

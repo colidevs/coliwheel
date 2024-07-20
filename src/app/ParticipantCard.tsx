@@ -9,12 +9,10 @@ interface ParticipantCardProps {
 export default function ParticipantCard({nombre, isSelected, color}: ParticipantCardProps) {
   return (
     <motion.div
-      className="flex h-16 w-16 items-center justify-center text-white shadow-xl"
+      className={`flex h-16 w-16 items-center justify-center text-white shadow-xl ${isSelected ? "shadow-cyan-500/50" : ""}`}
       style={{backgroundColor: color}}
     >
-      <div className={`flex items-center justify-center ${isSelected ? "shadow-cyan-500/50" : ""}`}>
-        {nombre}
-      </div>
+      {nombre}
     </motion.div>
   );
 }
