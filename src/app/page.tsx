@@ -1,9 +1,10 @@
 "use client";
-import {motion} from "framer-motion";
-import {useState, useEffect} from "react";
+
+import {useState, useRef} from "react";
 
 import ParticipantCard from "./ParticipantCard";
 
+import {Textarea} from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
 
 interface Opcion {
@@ -31,14 +32,16 @@ export default function HomePage() {
     {id: 8, nombre: "Pedro", color: getRandomColor()},
     {id: 9, nombre: "Elena", color: getRandomColor()},
   ]);
+
   const ValorInicial: Opcion = Participantes[0];
   const [ganador, setGanador] = useState<Opcion>(ValorInicial);
-  const [nombreNuevo, setNombreNuevo] = useState<string>("");
+
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const ElegirGanador = () => {
     const randomId = Math.floor(Math.random() * Participantes.length);
     const ganador: Opcion | undefined = Participantes.find(
-      (participante) => participante.id == randomId,
+      (participante) => participante.id === randomId,
     );
 
     if (!ganador) return;
@@ -46,26 +49,30 @@ export default function HomePage() {
   };
 
   const AgregarParticipante = () => {
-    if (nombreNuevo.trim() === "") return;
-    const nuevoParticipante: Opcion = {
-      id: Participantes.length,
-      nombre: nombreNuevo,
-      color: getRandomColor(),
-    };
+    if (inputRef.current === null) return;
 
-    setParticipantes([...Participantes, nuevoParticipante]);
-    setNombreNuevo("");
+    const nombresParticipantes = inputRef.current.value
+      .trim()
+      .split("\n")
+      .filter((participante) => participante !== "");
+
+    const nuevosParticipantes: Opcion[] = nombresParticipantes.map((participante, index) => ({
+      id: Participantes.length + index,
+      nombre: participante,
+      color: getRandomColor(),
+    }));
+
+    setParticipantes([...Participantes, ...nuevosParticipantes]);
+    inputRef.current.value = "";
   };
 
   return (
     <div className="flex flex-col items-center space-y-6 p-5">
       <div className="flex space-x-4">
-        <input
-          className="border p-2 text-black"
+        <Textarea
+          ref={inputRef}
+          className="border p-2 text-lg text-white"
           placeholder="Nombre del participante"
-          type="text"
-          value={nombreNuevo}
-          onChange={(e) => setNombreNuevo(e.target.value)}
         />
         <button
           className="rounded bg-blue-500 px-4 py-2 text-white"
