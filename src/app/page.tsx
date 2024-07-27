@@ -4,7 +4,21 @@ import {useState, useRef} from "react";
 
 import ParticipantCard from "./ParticipantCard";
 
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 import {Textarea} from "@/components/ui/textarea";
+  
 import {Button} from "@/components/ui/button";
 
 interface Opcion {
@@ -92,14 +106,26 @@ export default function HomePage() {
           />
         ))}
       </div>
-      <button
-        className="rounded bg-green-500 px-4 py-2 text-white"
-        type="button"
-        onClick={ElegirGanador}
-      >
-        Girar
-      </button>
-      <p className="mt-4 text-lg font-bold">Ganador: {ganador.nombre}</p>
+      <AlertDialog>
+        <AlertDialogTrigger>
+          <button
+            className="rounded bg-green-500 px-4 py-2 text-white"
+            type="button"
+            onClick={ElegirGanador}
+          >
+            Girar
+          </button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>El ganador es: {ganador.nombre}</AlertDialogTitle>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Eliminar Ganador</AlertDialogCancel>
+            <AlertDialogAction>Continuar</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
