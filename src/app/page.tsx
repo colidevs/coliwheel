@@ -4,21 +4,17 @@ import {useState, useRef} from "react";
 
 import ParticipantCard from "./ParticipantCard";
 
-
 import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
 import {Textarea} from "@/components/ui/textarea";
-  
 import {Button} from "@/components/ui/button";
 
 interface Opcion {
@@ -49,18 +45,42 @@ export default function HomePage() {
 
   const ValorInicial: Opcion = Participantes[0];
   const [ganador, setGanador] = useState<Opcion>(ValorInicial);
-
+  const [estaGirando, setEstaGirando] = useState<boolean>(false);
+  const [mostrarDialogo, setMostrarDialogo] = useState<boolean>(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const ElegirGanador = () => {
-    const randomId = Math.floor(Math.random() * Participantes.length);
-    const ganador: Opcion | undefined = Participantes.find(
-      (participante) => participante.id === randomId,
-    );
+  function ElegirGanador() {
+    setEstaGirando(true);
+    //opcion 2 let index = ganador.id
+    let index = Math.floor(Math.random() * Participantes.length);
+    let velocidad = 20;
+    const incremento = 80;
+    let parar = false;
 
-    if (!ganador) return;
-    setGanador(ganador);
-  };
+    const girar = () => {
+      if (parar) return;
+      //opcion 2 index = Math.floor(Math.random() * Participantes.length);
+      index = (index + 1) % Participantes.length;
+      const cambio = Participantes[index];
+
+      setGanador(cambio);
+
+      velocidad += incremento;
+      setTimeout(girar, velocidad);
+    };
+
+    girar();
+
+    setTimeout(() => {
+      parar = true;
+
+      const finalGanador = Participantes[index];
+
+      setGanador(finalGanador);
+      setEstaGirando(false);
+      setMostrarDialogo(true);
+    }, 9000); //entre 7000 a 9000
+  }
 
   const AgregarParticipante = () => {
     if (inputRef.current === null) return;
@@ -106,23 +126,25 @@ export default function HomePage() {
           />
         ))}
       </div>
-      <AlertDialog>
-        <AlertDialogTrigger>
-          <button
-            className="rounded bg-green-500 px-4 py-2 text-white"
-            type="button"
-            onClick={ElegirGanador}
-          >
-            Girar
-          </button>
-        </AlertDialogTrigger>
+      <button
+        className="rounded bg-green-500 px-4 py-2 text-white"
+        disabled={estaGirando}
+        type="button"
+        onClick={ElegirGanador}
+      >
+        Girar
+      </button>
+      <AlertDialog open={mostrarDialogo}>
+        <AlertDialogTrigger />
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>El ganador es: {ganador.nombre}</AlertDialogTitle>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Eliminar Ganador</AlertDialogCancel>
-            <AlertDialogAction>Continuar</AlertDialogAction>
+            <AlertDialogAction onClick={() => setMostrarDialogo(false)}>
+              Continuar
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
