@@ -1,6 +1,11 @@
 "use client";
 
+import {useState} from "react";
+import {motion} from "framer-motion";
+=======
+
 import {useState, useRef} from "react";
+
 
 import ParticipantCard from "./ParticipantCard";
 
@@ -82,48 +87,62 @@ export default function HomePage() {
     const nuevosParticipantes: Opcion[] = nombresParticipantes.map((participante, index) => ({
       id: Participantes.length + index,
       nombre: participante,
+
       color: getRandomColor(),
     }));
 
-    setParticipantes([...Participantes, ...nuevosParticipantes]);
-    inputRef.current.value = "";
+
+    setParticipantes([...participantes, nuevoParticipante]);
+    setNombreNuevo("");
   };
 
   return (
-    <div className="flex flex-col items-center space-y-6 p-5">
-      <div className="flex space-x-4">
-        <Textarea
+    <div className="flex min-h-screen items-center justify-between">
+      {/* Section de participantes */}
+      <section className="bg- flex flex-1 flex-col rounded-xl p-5 shadow-2xl">
+        <section className="mb-4 grid flex-1 grid-cols-4 gap-5">
+          {participantes.map((participante) => (
+            <ParticipantCard
+              key={participante.id}
+              color={participante.color}
+              isSelected={participante.id === ganador.id}
+              nombre={participante.nombre}
+            />
+          ))}
+        </section>
+        <div className="items-center">
+          <Button
+            className="bg-indigo-950 px-20 py-2 text-white "
+            disabled={estaGirando && Participantes.length === 0}
+             type="button"
+             onClick={ElegirGanador}
+          >
+            ¡Girar!
+          </Button>
+        </div>
+      </section>
+
+      {/* Espacio entre sections */}
+      <div className="w-4" />
+
+      {/* Section de agregar participante */}
+      <section className="w-80 rounded-lg bg-indigo-950 p-5 shadow-xl">
+        <h2 className="mb-4 text-center font-bold">Agrega Participantes!</h2>
+        <section className="flex flex-col items-center space-y-6">
+           <Textarea
           ref={inputRef}
           className="border p-2 text-lg text-white"
           placeholder="Nombre del participante"
         />
-        <button
-          className="rounded bg-blue-500 px-4 py-2 text-white"
-          type="button"
-          onClick={AgregarParticipante}
-        >
-          Agregar
-        </button>
-      </div>
-      <div className="grid grid-cols-5 gap-6">
-        {Participantes.map((participante) => (
-          <ParticipantCard
-            key={participante.id}
-            color={participante.color}
-            isSelected={participante.id === ganador?.id}
-            nombre={participante.nombre}
-          />
-        ))}
-      </div>
-      <button
-        className="rounded bg-green-500 px-4 py-2 text-white"
-        disabled={estaGirando && Participantes.length === 0}
-        type="button"
-        onClick={ElegirGanador}
-      >
-        Girar
-      </button>
-      <AlertDialog open={mostrarDialogo}>
+          <button
+            className="rounded bg-cyan-500 px-4 py-2 text-white"
+            type="button"
+            onClick={AgregarParticipante}
+          >
+            Agregar
+          </button>
+        </section>
+          <AlertDialog open={mostrarDialogo}>
         <AlertDialogTrigger />
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -137,6 +156,7 @@ export default function HomePage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      </section>
     </div>
   );
 }
