@@ -1,6 +1,6 @@
 "use client";
+import {useState} from "react";
 import {motion} from "framer-motion";
-import {useState, useEffect} from "react";
 
 import ParticipantCard from "./ParticipantCard";
 
@@ -19,7 +19,7 @@ const getRandomColor = (): string => {
 };
 
 export default function HomePage() {
-  const [Participantes, setParticipantes] = useState<Opcion[]>([
+  const [participantes, setParticipantes] = useState<Opcion[]>([
     {id: 0, nombre: "Martin", color: getRandomColor()},
     {id: 1, nombre: "Ana", color: getRandomColor()},
     {id: 2, nombre: "Luis", color: getRandomColor()},
@@ -31,14 +31,14 @@ export default function HomePage() {
     {id: 8, nombre: "Pedro", color: getRandomColor()},
     {id: 9, nombre: "Elena", color: getRandomColor()},
   ]);
-  const ValorInicial: Opcion = Participantes[0];
+  const ValorInicial: Opcion = participantes[0];
   const [ganador, setGanador] = useState<Opcion>(ValorInicial);
   const [nombreNuevo, setNombreNuevo] = useState<string>("");
 
   const ElegirGanador = () => {
-    const randomId = Math.floor(Math.random() * Participantes.length);
-    const ganador: Opcion | undefined = Participantes.find(
-      (participante) => participante.id == randomId,
+    const randomId = Math.floor(Math.random() * participantes.length);
+    const ganador: Opcion | undefined = participantes.find(
+      (participante) => participante.id === randomId,
     );
 
     if (!ganador) return;
@@ -48,51 +48,63 @@ export default function HomePage() {
   const AgregarParticipante = () => {
     if (nombreNuevo.trim() === "") return;
     const nuevoParticipante: Opcion = {
-      id: Participantes.length,
+      id: participantes.length,
       nombre: nombreNuevo,
       color: getRandomColor(),
     };
 
-    setParticipantes([...Participantes, nuevoParticipante]);
+    setParticipantes([...participantes, nuevoParticipante]);
     setNombreNuevo("");
   };
 
   return (
-    <div className="flex flex-col items-center space-y-6 p-5">
-      <div className="flex space-x-4">
-        <input
-          className="border p-2 text-black"
-          placeholder="Nombre del participante"
-          type="text"
-          value={nombreNuevo}
-          onChange={(e) => setNombreNuevo(e.target.value)}
-        />
-        <button
-          className="rounded bg-blue-500 px-4 py-2 text-white"
-          type="button"
-          onClick={AgregarParticipante}
-        >
-          Agregar
-        </button>
-      </div>
-      <div className="grid grid-cols-5 gap-6">
-        {Participantes.map((participante) => (
-          <ParticipantCard
-            key={participante.id}
-            color={participante.color}
-            isSelected={participante.id === ganador.id}
-            nombre={participante.nombre}
+    <div className="flex min-h-screen items-center justify-between">
+      {/* Section de participantes */}
+      <section className="bg- flex flex-1 flex-col rounded-xl p-5 shadow-2xl">
+        <section className="mb-4 grid flex-1 grid-cols-4 gap-5">
+          {participantes.map((participante) => (
+            <ParticipantCard
+              key={participante.id}
+              color={participante.color}
+              isSelected={participante.id === ganador.id}
+              nombre={participante.nombre}
+            />
+          ))}
+        </section>
+        <div className="items-center">
+          <Button
+            className="bg-indigo-950 px-20 py-2 text-white "
+            type="button"
+            onClick={ElegirGanador}
+          >
+            ¡Girar!
+          </Button>
+        </div>
+      </section>
+
+      {/* Espacio entre sections */}
+      <div className="w-4" />
+
+      {/* Section de agregar participante */}
+      <section className="w-80 rounded-lg bg-indigo-950 p-5 shadow-xl">
+        <h2 className="mb-4 text-center font-bold">Agrega Participantes!</h2>
+        <section className="flex flex-col items-center space-y-6">
+          <input
+            className="border p-2 text-black"
+            placeholder="Nombre del participante"
+            type="text"
+            value={nombreNuevo}
+            onChange={(e) => setNombreNuevo(e.target.value)}
           />
-        ))}
-      </div>
-      <button
-        className="rounded bg-green-500 px-4 py-2 text-white"
-        type="button"
-        onClick={ElegirGanador}
-      >
-        Girar
-      </button>
-      <p className="mt-4 text-lg font-bold">Ganador: {ganador.nombre}</p>
+          <button
+            className="rounded bg-cyan-500 px-4 py-2 text-white"
+            type="button"
+            onClick={AgregarParticipante}
+          >
+            Agregar
+          </button>
+        </section>
+      </section>
     </div>
   );
 }
