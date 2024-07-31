@@ -1,9 +1,25 @@
 "use client";
+
 import {useState} from "react";
 import {motion} from "framer-motion";
+=======
+
+import {useState, useRef} from "react";
+
 
 import ParticipantCard from "./ParticipantCard";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {Textarea} from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
 
 interface Opcion {
@@ -19,39 +35,62 @@ const getRandomColor = (): string => {
 };
 
 export default function HomePage() {
-  const [participantes, setParticipantes] = useState<Opcion[]>([
-    {id: 0, nombre: "Martin", color: getRandomColor()},
-    {id: 1, nombre: "Ana", color: getRandomColor()},
-    {id: 2, nombre: "Luis", color: getRandomColor()},
-    {id: 3, nombre: "Carlos", color: getRandomColor()},
-    {id: 4, nombre: "Maria", color: getRandomColor()},
-    {id: 5, nombre: "Sofia", color: getRandomColor()},
-    {id: 6, nombre: "Jorge", color: getRandomColor()},
-    {id: 7, nombre: "Laura", color: getRandomColor()},
-    {id: 8, nombre: "Pedro", color: getRandomColor()},
-    {id: 9, nombre: "Elena", color: getRandomColor()},
-  ]);
-  const ValorInicial: Opcion = participantes[0];
-  const [ganador, setGanador] = useState<Opcion>(ValorInicial);
-  const [nombreNuevo, setNombreNuevo] = useState<string>("");
+  const [Participantes, setParticipantes] = useState<Opcion[]>([]);
 
-  const ElegirGanador = () => {
-    const randomId = Math.floor(Math.random() * participantes.length);
-    const ganador: Opcion | undefined = participantes.find(
-      (participante) => participante.id === randomId,
-    );
+  const [ganador, setGanador] = useState<Opcion>();
+  const [estaGirando, setEstaGirando] = useState<boolean>(false);
+  const [mostrarDialogo, setMostrarDialogo] = useState<boolean>(false);
 
-    if (!ganador) return;
-    setGanador(ganador);
-  };
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  function ElegirGanador() {
+    setEstaGirando(true);
+    //opcion 2 let index = ganador.id
+    let index = Math.floor(Math.random() * Participantes.length);
+    let velocidad = 20;
+    const incremento = 80;
+    let parar = false;
+
+    const girar = () => {
+      if (parar) return;
+      //opcion 2 index = Math.floor(Math.random() * Participantes.length);
+      index = (index + 1) % Participantes.length;
+      const cambio = Participantes[index];
+
+      setGanador(cambio);
+
+      velocidad += incremento;
+      setTimeout(girar, velocidad);
+    };
+
+    girar();
+
+    setTimeout(() => {
+      parar = true;
+
+      const finalGanador = Participantes[index];
+
+      setGanador(finalGanador);
+      setEstaGirando(false);
+      setMostrarDialogo(true);
+    }, 9000); //entre 7000 a 9000
+  }
 
   const AgregarParticipante = () => {
-    if (nombreNuevo.trim() === "") return;
-    const nuevoParticipante: Opcion = {
-      id: participantes.length,
-      nombre: nombreNuevo,
+    if (inputRef.current === null) return;
+
+    const nombresParticipantes = inputRef.current.value
+      .trim()
+      .split("\n")
+      .filter((participante) => participante !== "");
+
+    const nuevosParticipantes: Opcion[] = nombresParticipantes.map((participante, index) => ({
+      id: Participantes.length + index,
+      nombre: participante,
+
       color: getRandomColor(),
-    };
+    }));
+
 
     setParticipantes([...participantes, nuevoParticipante]);
     setNombreNuevo("");
@@ -74,8 +113,9 @@ export default function HomePage() {
         <div className="items-center">
           <Button
             className="bg-indigo-950 px-20 py-2 text-white "
-            type="button"
-            onClick={ElegirGanador}
+            disabled={estaGirando && Participantes.length === 0}
+             type="button"
+             onClick={ElegirGanador}
           >
             ¡Girar!
           </Button>
@@ -89,13 +129,11 @@ export default function HomePage() {
       <section className="w-80 rounded-lg bg-indigo-950 p-5 shadow-xl">
         <h2 className="mb-4 text-center font-bold">Agrega Participantes!</h2>
         <section className="flex flex-col items-center space-y-6">
-          <input
-            className="border p-2 text-black"
-            placeholder="Nombre del participante"
-            type="text"
-            value={nombreNuevo}
-            onChange={(e) => setNombreNuevo(e.target.value)}
-          />
+           <Textarea
+          ref={inputRef}
+          className="border p-2 text-lg text-white"
+          placeholder="Nombre del participante"
+        />
           <button
             className="rounded bg-cyan-500 px-4 py-2 text-white"
             type="button"
@@ -104,6 +142,20 @@ export default function HomePage() {
             Agregar
           </button>
         </section>
+          <AlertDialog open={mostrarDialogo}>
+        <AlertDialogTrigger />
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>El ganador es: {ganador?.nombre}</AlertDialogTitle>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Eliminar Ganador</AlertDialogCancel>
+            <AlertDialogAction onClick={() => setMostrarDialogo(false)}>
+              Continuar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       </section>
     </div>
   );
