@@ -4,7 +4,6 @@ import {useState, useRef} from "react";
 
 import ParticipantCard from "./ParticipantCard";
 
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,9 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
 import {Textarea} from "@/components/ui/textarea";
-  
 import {Button} from "@/components/ui/button";
 
 interface Opcion {
@@ -34,21 +31,9 @@ const getRandomColor = (): string => {
 };
 
 export default function HomePage() {
-  const [Participantes, setParticipantes] = useState<Opcion[]>([
-    {id: 0, nombre: "Martin", color: getRandomColor()},
-    {id: 1, nombre: "Ana", color: getRandomColor()},
-    {id: 2, nombre: "Luis", color: getRandomColor()},
-    {id: 3, nombre: "Carlos", color: getRandomColor()},
-    {id: 4, nombre: "Maria", color: getRandomColor()},
-    {id: 5, nombre: "Sofia", color: getRandomColor()},
-    {id: 6, nombre: "Jorge", color: getRandomColor()},
-    {id: 7, nombre: "Laura", color: getRandomColor()},
-    {id: 8, nombre: "Pedro", color: getRandomColor()},
-    {id: 9, nombre: "Elena", color: getRandomColor()},
-  ]);
+  const [Participantes, setParticipantes] = useState<Opcion[]>([]);
 
-  const ValorInicial: Opcion = Participantes[0];
-  const [ganador, setGanador] = useState<Opcion>(ValorInicial);
+  const [ganador, setGanador] = useState<Opcion>();
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -101,7 +86,7 @@ export default function HomePage() {
           <ParticipantCard
             key={participante.id}
             color={participante.color}
-            isSelected={participante.id === ganador.id}
+            isSelected={participante.id === ganador?.id}
             nombre={participante.nombre}
           />
         ))}
@@ -110,6 +95,7 @@ export default function HomePage() {
         <AlertDialogTrigger>
           <button
             className="rounded bg-green-500 px-4 py-2 text-white"
+            disabled={Participantes.length === 0}
             type="button"
             onClick={ElegirGanador}
           >
@@ -118,7 +104,7 @@ export default function HomePage() {
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>El ganador es: {ganador.nombre}</AlertDialogTitle>
+            <AlertDialogTitle>El ganador es: {ganador?.nombre}</AlertDialogTitle>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Eliminar Ganador</AlertDialogCancel>
