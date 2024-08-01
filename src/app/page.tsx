@@ -3,8 +3,6 @@
 import {motion} from "framer-motion";
 import {useState, useRef} from "react";
 
-import ParticipantCard from "./ParticipantCard";
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,6 +30,7 @@ const getRandomColor = (): string => {
 
 export default function HomePage() {
   const [participantes, setparticipantes] = useState<Opcion[]>([]);
+  const [mostrarBotonX, setMostrarBotonX] = useState<boolean>(true);
 
   const [ganador, setGanador] = useState<Opcion>();
   const [estaGirando, setEstaGirando] = useState<boolean>(false);
@@ -39,9 +38,14 @@ export default function HomePage() {
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-
   function LimpiarNombres() {
     setparticipantes([]);
+  }
+
+  function eliminarParticipante(id: number) {
+    const nuevoArray = participantes.filter((participante) => participante.id !== id);
+
+    setparticipantes(nuevoArray);
   }
 
   function PonerDefalut() {
@@ -65,7 +69,6 @@ export default function HomePage() {
 
   function ElegirGanador() {
     setEstaGirando(true);
-    //opcion 2 let index = ganador.id
     let index = Math.floor(Math.random() * participantes.length);
     let velocidad = 20;
     const incremento = 80;
@@ -73,8 +76,7 @@ export default function HomePage() {
 
     const girar = () => {
       if (parar) return;
-      //opcion 2 index = Math.floor(Math.random() * Participantes.length);
-      index = (index + 1) % participantes.length;
+      index = Math.floor(Math.random() * participantes.length);
       const cambio = participantes[index];
 
       setGanador(cambio);
@@ -93,7 +95,7 @@ export default function HomePage() {
       setGanador(finalGanador);
       setEstaGirando(false);
       setMostrarDialogo(true);
-    }, 9000); //entre 7000 a 9000
+    }, 9000);
   }
 
   const AgregarParticipante = () => {
@@ -104,10 +106,12 @@ export default function HomePage() {
       .split("\n")
       .filter((participante) => participante !== "");
 
-    const nuevosparticipantes: Opcion[] = nombresParticipantes.map((participante, index) => ({
-      id: participantes.length + index,
-      nombre: participante,
+    const maxid =
+      participantes.length === 0 ? 0 : Math.max(...participantes.map((user) => user.id));
 
+    const nuevosparticipantes: Opcion[] = nombresParticipantes.map((participante, index) => ({
+      id: maxid + index + 1,
+      nombre: participante,
       color: getRandomColor(),
     }));
 
@@ -117,16 +121,33 @@ export default function HomePage() {
 
   return (
     <div className="flex min-h-screen items-center justify-between">
-      {/* Section de participantes */}
       <section className="bg- flex flex-1 flex-col rounded-xl p-5 shadow-2xl">
         <section className="mb-4 grid flex-1 grid-cols-4 gap-5">
           {participantes.map((participante) => (
-            <ParticipantCard
+            <motion.div
               key={participante.id}
-              color={participante.color}
-              isSelected={participante.id === ganador?.id}
-              nombre={participante.nombre}
-            />
+              animate={{
+                scale: ganador?.id === participante.id ? 1.1 : 1,
+                backgroundColor: ganador?.id === participante.id ? "#00CADB" : participante.color,
+                boxShadow:
+                  ganador?.id === participante.id ? `0 4px 15px ${participante.color}` : "",
+              }}
+              className="relative flex h-16 w-16 items-center justify-center text-lg text-black shadow-xl"
+              initial={{scale: 1}}
+              style={{backgroundColor: participante.color}}
+              transition={{duration: 0.2}}
+            >
+              {participante.nombre}
+              <button
+                className="absolute right-0 top-0 mr-1 mt-1 rounded-full bg-red-500 px-2 text-xs text-white"
+                hidden={mostrarBotonX}
+                style={{transform: "translate(50%, -50%)"}}
+                type="button"
+                onClick={() => eliminarParticipante(participante.id)}
+              >
+                X
+              </button>
+            </motion.div>
           ))}
         </section>
         <div className="items-center">
@@ -141,10 +162,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Espacio entre sections */}
       <div className="w-4" />
 
-      {/* Section de agregar participante */}
       <section className="w-80 rounded-lg bg-indigo-950 p-5 shadow-xl">
         <h2 className="mb-4 text-center font-bold">Agrega Participantes!</h2>
         <section className="flex flex-col items-center space-y-6">
@@ -176,8 +195,12 @@ export default function HomePage() {
             >
               🧹
             </button>
-            <button className="rounded bg-cyan-500 px-4 py-2 text-white" type="button">
-              c
+            <button
+              className="rounded bg-cyan-500 px-4 py-2 text-white"
+              type="button"
+              onClick={() => setMostrarBotonX(!mostrarBotonX)}
+            >
+              ✖️
             </button>
           </div>
         </section>
