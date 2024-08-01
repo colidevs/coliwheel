@@ -39,6 +39,10 @@ export default function HomePage() {
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
+  function LimpiarNombres() {
+    setparticipantes([]);
+  }
+
   function ElegirGanador() {
     setEstaGirando(true);
     //opcion 2 let index = ganador.id
@@ -141,8 +145,12 @@ export default function HomePage() {
             <button className="rounded bg-cyan-500 px-4 py-2 text-white" type="button">
               a
             </button>
-            <button className="rounded bg-cyan-500 px-4 py-2 text-white" type="button">
-              b
+            <button
+              className="rounded bg-cyan-500 px-4 py-2 text-white"
+              type="button"
+              onClick={LimpiarNombres}
+            >
+              🧹
             </button>
             <button className="rounded bg-cyan-500 px-4 py-2 text-white" type="button">
               c
