@@ -1,11 +1,7 @@
 "use client";
 
-import {useState} from "react";
 import {motion} from "framer-motion";
-=======
-
 import {useState, useRef} from "react";
-
 
 import ParticipantCard from "./ParticipantCard";
 
@@ -35,7 +31,7 @@ const getRandomColor = (): string => {
 };
 
 export default function HomePage() {
-  const [Participantes, setParticipantes] = useState<Opcion[]>([]);
+  const [participantes, setparticipantes] = useState<Opcion[]>([]);
 
   const [ganador, setGanador] = useState<Opcion>();
   const [estaGirando, setEstaGirando] = useState<boolean>(false);
@@ -46,7 +42,7 @@ export default function HomePage() {
   function ElegirGanador() {
     setEstaGirando(true);
     //opcion 2 let index = ganador.id
-    let index = Math.floor(Math.random() * Participantes.length);
+    let index = Math.floor(Math.random() * participantes.length);
     let velocidad = 20;
     const incremento = 80;
     let parar = false;
@@ -54,8 +50,8 @@ export default function HomePage() {
     const girar = () => {
       if (parar) return;
       //opcion 2 index = Math.floor(Math.random() * Participantes.length);
-      index = (index + 1) % Participantes.length;
-      const cambio = Participantes[index];
+      index = (index + 1) % participantes.length;
+      const cambio = participantes[index];
 
       setGanador(cambio);
 
@@ -68,7 +64,7 @@ export default function HomePage() {
     setTimeout(() => {
       parar = true;
 
-      const finalGanador = Participantes[index];
+      const finalGanador = participantes[index];
 
       setGanador(finalGanador);
       setEstaGirando(false);
@@ -84,16 +80,15 @@ export default function HomePage() {
       .split("\n")
       .filter((participante) => participante !== "");
 
-    const nuevosParticipantes: Opcion[] = nombresParticipantes.map((participante, index) => ({
-      id: Participantes.length + index,
+    const nuevosparticipantes: Opcion[] = nombresParticipantes.map((participante, index) => ({
+      id: participantes.length + index,
       nombre: participante,
 
       color: getRandomColor(),
     }));
 
-
-    setParticipantes([...participantes, nuevoParticipante]);
-    setNombreNuevo("");
+    setparticipantes([...participantes, ...nuevosparticipantes]);
+    inputRef.current.value = "";
   };
 
   return (
@@ -105,7 +100,7 @@ export default function HomePage() {
             <ParticipantCard
               key={participante.id}
               color={participante.color}
-              isSelected={participante.id === ganador.id}
+              isSelected={participante.id === ganador?.id}
               nombre={participante.nombre}
             />
           ))}
@@ -113,9 +108,9 @@ export default function HomePage() {
         <div className="items-center">
           <Button
             className="bg-indigo-950 px-20 py-2 text-white "
-            disabled={estaGirando && Participantes.length === 0}
-             type="button"
-             onClick={ElegirGanador}
+            disabled={estaGirando ? true : participantes.length === 0}
+            type="button"
+            onClick={ElegirGanador}
           >
             ¡Girar!
           </Button>
@@ -129,11 +124,12 @@ export default function HomePage() {
       <section className="w-80 rounded-lg bg-indigo-950 p-5 shadow-xl">
         <h2 className="mb-4 text-center font-bold">Agrega Participantes!</h2>
         <section className="flex flex-col items-center space-y-6">
-           <Textarea
-          ref={inputRef}
-          className="border p-2 text-lg text-white"
-          placeholder="Nombre del participante"
-        />
+          <Textarea
+            ref={inputRef}
+            className="border p-2 text-lg text-white"
+            placeholder="Nombre del participante"
+          />
+
           <button
             className="rounded bg-cyan-500 px-4 py-2 text-white"
             type="button"
@@ -141,21 +137,32 @@ export default function HomePage() {
           >
             Agregar
           </button>
+          <div className="flex gap-4">
+            <button className="rounded bg-cyan-500 px-4 py-2 text-white" type="button">
+              a
+            </button>
+            <button className="rounded bg-cyan-500 px-4 py-2 text-white" type="button">
+              b
+            </button>
+            <button className="rounded bg-cyan-500 px-4 py-2 text-white" type="button">
+              c
+            </button>
+          </div>
         </section>
-          <AlertDialog open={mostrarDialogo}>
-        <AlertDialogTrigger />
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>El ganador es: {ganador?.nombre}</AlertDialogTitle>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Eliminar Ganador</AlertDialogCancel>
-            <AlertDialogAction onClick={() => setMostrarDialogo(false)}>
-              Continuar
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        <AlertDialog open={mostrarDialogo}>
+          <AlertDialogTrigger />
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>El ganador es: {ganador?.nombre}</AlertDialogTitle>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Eliminar Ganador</AlertDialogCancel>
+              <AlertDialogAction onClick={() => setMostrarDialogo(false)}>
+                Continuar
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </section>
     </div>
   );
