@@ -39,6 +39,11 @@ export default function HomePage() {
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
+
+  function LimpiarNombres() {
+    setparticipantes([]);
+  }
+
   function PonerDefalut() {
     const NombresDeafault: Opcion[] = [
       {id: 0, nombre: "Joel", color: getRandomColor()},
@@ -164,8 +169,12 @@ export default function HomePage() {
             >
               🕊️
             </button>
-            <button className="rounded bg-cyan-500 px-4 py-2 text-white" type="button">
-              b
+            <button
+              className="rounded bg-cyan-500 px-4 py-2 text-white"
+              type="button"
+              onClick={LimpiarNombres}
+            >
+              🧹
             </button>
             <button className="rounded bg-cyan-500 px-4 py-2 text-white" type="button">
               c
