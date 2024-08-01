@@ -42,6 +42,13 @@ export default function HomePage() {
     setparticipantes([]);
   }
 
+  function eliminarGanador() {
+    const nuevoArray = participantes.filter((participante) => participante.id !== ganador?.id);
+
+    setparticipantes(nuevoArray);
+    setMostrarDialogo(false);
+  }
+
   function eliminarParticipante(id: number) {
     const nuevoArray = participantes.filter((participante) => participante.id !== id);
 
@@ -132,7 +139,7 @@ export default function HomePage() {
                 boxShadow:
                   ganador?.id === participante.id ? `0 4px 15px ${participante.color}` : "",
               }}
-              className="relative flex h-16 w-16 items-center justify-center text-lg text-black shadow-xl"
+              className="relative flex h-16 w-16 items-center justify-center rounded-xl text-lg text-black shadow-xl"
               initial={{scale: 1}}
               style={{backgroundColor: participante.color}}
               transition={{duration: 0.2}}
@@ -211,7 +218,7 @@ export default function HomePage() {
               <AlertDialogTitle>El ganador es: {ganador?.nombre}</AlertDialogTitle>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Eliminar Ganador</AlertDialogCancel>
+              <AlertDialogCancel onClick={eliminarGanador}>Eliminar Ganador</AlertDialogCancel>
               <AlertDialogAction onClick={() => setMostrarDialogo(false)}>
                 Continuar
               </AlertDialogAction>
