@@ -39,8 +39,28 @@ export default function HomePage() {
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
+
   function LimpiarNombres() {
     setparticipantes([]);
+  }
+
+  function PonerDefalut() {
+    const NombresDeafault: Opcion[] = [
+      {id: 0, nombre: "Joel", color: getRandomColor()},
+      {id: 1, nombre: "Astrid", color: getRandomColor()},
+      {id: 2, nombre: "Eze", color: getRandomColor()},
+      {id: 3, nombre: "Fran", color: getRandomColor()},
+      {id: 4, nombre: "Facu", color: getRandomColor()},
+      {id: 5, nombre: "Fede", color: getRandomColor()},
+      {id: 6, nombre: "Guada", color: getRandomColor()},
+      {id: 7, nombre: "Guille", color: getRandomColor()},
+      {id: 8, nombre: "Marco", color: getRandomColor()},
+      {id: 9, nombre: "Nico", color: getRandomColor()},
+      {id: 10, nombre: "Lucas", color: getRandomColor()},
+      {id: 11, nombre: "Lato", color: getRandomColor()},
+    ];
+
+    setparticipantes(NombresDeafault);
   }
 
   function ElegirGanador() {
@@ -142,8 +162,12 @@ export default function HomePage() {
             Agregar
           </button>
           <div className="flex gap-4">
-            <button className="rounded bg-cyan-500 px-4 py-2 text-white" type="button">
-              a
+            <button
+              className="rounded bg-cyan-500 px-4 py-2 text-white"
+              type="button"
+              onClick={PonerDefalut}
+            >
+              🕊️
             </button>
             <button
               className="rounded bg-cyan-500 px-4 py-2 text-white"
