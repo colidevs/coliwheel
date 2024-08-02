@@ -2,17 +2,8 @@
 
 import {motion} from "framer-motion";
 import {useState, useRef} from "react";
+import Swal from "sweetalert2";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import {Textarea} from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
 
@@ -34,19 +25,11 @@ export default function HomePage() {
 
   const [ganador, setGanador] = useState<Opcion>();
   const [estaGirando, setEstaGirando] = useState<boolean>(false);
-  const [mostrarDialogo, setMostrarDialogo] = useState<boolean>(false);
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   function LimpiarNombres() {
     setparticipantes([]);
-  }
-
-  function eliminarGanador() {
-    const nuevoArray = participantes.filter((participante) => participante.id !== ganador?.id);
-
-    setparticipantes(nuevoArray);
-    setMostrarDialogo(false);
   }
 
   function eliminarParticipante(id: number) {
@@ -101,7 +84,20 @@ export default function HomePage() {
 
       setGanador(finalGanador);
       setEstaGirando(false);
-      setMostrarDialogo(true);
+      Swal.fire({
+        title: `El ganador es ${finalGanador?.nombre}`,
+        showCancelButton: true,
+        cancelButtonText: "Cancelar",
+        confirmButtonText: "Eliminar Ganador",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const nuevoArray = participantes.filter(
+            (participante) => participante.id !== finalGanador?.id,
+          );
+
+          setparticipantes(nuevoArray);
+        }
+      });
     }, 9000);
   }
 
@@ -211,20 +207,6 @@ export default function HomePage() {
             </button>
           </div>
         </section>
-        <AlertDialog open={mostrarDialogo}>
-          <AlertDialogTrigger />
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>El ganador es: {ganador?.nombre}</AlertDialogTitle>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel onClick={eliminarGanador}>Eliminar Ganador</AlertDialogCancel>
-              <AlertDialogAction onClick={() => setMostrarDialogo(false)}>
-                Continuar
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
       </section>
     </div>
   );
