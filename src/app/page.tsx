@@ -5,7 +5,6 @@ import {useState, useRef} from "react";
 import Swal from "sweetalert2";
 
 import {Textarea} from "@/components/ui/textarea";
-import {Button} from "@/components/ui/button";
 
 interface Opcion {
   id: number;
@@ -56,7 +55,7 @@ export default function HomePage() {
 
     setparticipantes(NombresDeafault);
   }
-
+  //GIRAR
   function ElegirGanador() {
     setEstaGirando(true);
     let index = Math.floor(Math.random() * participantes.length);
@@ -101,6 +100,7 @@ export default function HomePage() {
     }, 9000);
   }
 
+  //Agregar Participantes
   const AgregarParticipante = () => {
     if (inputRef.current === null) return;
 
@@ -135,7 +135,7 @@ export default function HomePage() {
                 boxShadow:
                   ganador?.id === participante.id ? `0 4px 15px ${participante.color}` : "",
               }}
-              className="relative flex h-16 w-16 items-center justify-center rounded-xl text-lg text-black shadow-xl"
+              className="relative flex h-20 w-28 items-center justify-center rounded-xl text-lg text-black shadow-xl"
               initial={{scale: 1}}
               style={{backgroundColor: participante.color}}
               transition={{duration: 0.2}}
@@ -153,15 +153,15 @@ export default function HomePage() {
             </motion.div>
           ))}
         </section>
-        <div className="items-center">
-          <Button
-            className="bg-indigo-950 px-20 py-2 text-white "
+        <div>
+          <button
+            className="focus: rounded-xl bg-indigo-800 px-20 py-2 text-white ring hover:bg-cyan-500 focus:ring-indigo-600"
             disabled={estaGirando ? true : participantes.length === 0}
             type="button"
             onClick={ElegirGanador}
           >
             ¡Girar!
-          </Button>
+          </button>
         </div>
       </section>
 
@@ -185,25 +185,25 @@ export default function HomePage() {
           </button>
           <div className="flex gap-4">
             <button
-              className="rounded bg-cyan-500 px-4 py-2 text-white"
+              className="rounded bg-cyan-500 px-4 py-2 text-white hover:bg-indigo-500"
               type="button"
               onClick={PonerDefalut}
             >
               🕊️
             </button>
             <button
-              className="rounded bg-cyan-500 px-4 py-2 text-white"
+              className="rounded bg-cyan-500 px-4 py-2 text-white hover:bg-indigo-500"
               type="button"
               onClick={LimpiarNombres}
             >
               🧹
             </button>
             <button
-              className="rounded bg-cyan-500 px-4 py-2 text-white"
+              className="rounded bg-cyan-500 px-4 py-2 text-white hover:bg-indigo-500"
               type="button"
               onClick={() => setMostrarBotonX(!mostrarBotonX)}
             >
-              ✖️
+              ❌
             </button>
           </div>
         </section>

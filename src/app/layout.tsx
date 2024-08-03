@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang="en">
-      <body className="container m-auto grid min-h-screen grid-rows-[auto,1fr,auto]  bg-gradient-to-br from-indigo-900 to-purple-700 p-8 px-4 font-sans antialiased">
-        <header className="rounded-lg bg-indigo-950 text-center text-xl font-bold leading-[4rem] ">
+      <body className="container m-auto grid min-h-screen grid-rows-[auto,1fr,auto]  bg-gradient-to-br from-indigo-900 p-8 px-4 font-sans antialiased ">
+        <header className="text-center text-xl font-bold leading-[4rem]">
           <Link href="/">Coliwheel</Link>
         </header>
         <main>{children}</main>
