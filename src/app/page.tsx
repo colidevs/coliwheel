@@ -97,7 +97,7 @@ export default function HomePage() {
           setparticipantes(nuevoArray);
         }
       });
-    }, 9000);
+    }, 7000);
   }
 
   //Agregar Participantes
