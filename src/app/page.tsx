@@ -123,9 +123,9 @@ export default function HomePage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-between">
-      <section className="bg- flex flex-1 flex-col rounded-xl p-5 shadow-2xl">
-        <section className="mb-4 grid flex-1 grid-cols-4 gap-5">
+    <div className="flex min-h-screen flex-wrap items-center justify-center p-4 md:p-8 lg:flex-nowrap">
+      <section className="bg- flex w-full flex-1 flex-col rounded-xl p-5 shadow-2xl lg:w-2/3">
+        <section className="mb-4 grid flex-1 grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
           {participantes.map((participante) => (
             <motion.div
               key={participante.id}
@@ -135,7 +135,7 @@ export default function HomePage() {
                 boxShadow:
                   ganador?.id === participante.id ? `0 4px 15px ${participante.color}` : "",
               }}
-              className="relative flex h-20 w-28 items-center justify-center rounded-xl text-lg text-black shadow-xl"
+              className="relative flex h-20 items-center justify-center rounded-xl text-lg text-black shadow-xl sm:h-24 sm:w-32"
               initial={{scale: 1}}
               style={{backgroundColor: participante.color}}
               transition={{duration: 0.2}}
@@ -153,9 +153,9 @@ export default function HomePage() {
             </motion.div>
           ))}
         </section>
-        <div>
+        <div className="flex justify-center">
           <button
-            className="focus: rounded-xl bg-indigo-800 px-20 py-2 text-white ring hover:bg-cyan-500 focus:ring-indigo-600"
+            className="focus: rounded-xl bg-indigo-800 px-16 py-2 text-white ring hover:bg-cyan-500 focus:ring-indigo-600 sm:px-20"
             disabled={estaGirando ? true : participantes.length === 0}
             type="button"
             onClick={ElegirGanador}
@@ -165,19 +165,19 @@ export default function HomePage() {
         </div>
       </section>
 
-      <div className="w-4" />
+      <div className="hidden lg:block lg:w-4" />
 
-      <section className="w-80 rounded-lg bg-indigo-950 p-5 shadow-xl">
-        <h2 className="mb-4 text-center font-bold">Agrega Participantes!</h2>
+      <section className="mt-8 w-full rounded-lg bg-indigo-950 p-5 shadow-xl lg:mt-0 lg:w-1/3">
+        <h2 className="mb-4 text-center font-bold text-white">¡Agrega Participantes!</h2>
         <section className="flex flex-col items-center space-y-6">
           <Textarea
             ref={inputRef}
-            className="border p-2 text-lg text-white"
+            className="w-full border p-2 text-lg text-white"
             placeholder="Nombre del participante"
           />
 
           <button
-            className="rounded bg-cyan-500 px-4 py-2 text-white"
+            className="w-full rounded bg-cyan-500 px-4 py-2 text-white sm:w-auto"
             type="button"
             onClick={AgregarParticipante}
           >
