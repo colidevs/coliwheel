@@ -19,20 +19,33 @@ const getRandomColor = (): string => {
 };
 
 export default function HomePage() {
-  const [participantes, setparticipantes] = useState<Opcion[]>([]);
-  const [mostrarBotonX, setMostrarBotonX] = useState<boolean>(true);
+  const Ejemplos: Opcion[] = [
+    {id: 0, nombre: "Ejemplo 1", color: getRandomColor()},
+    {id: 1, nombre: "Ejemplo 2", color: getRandomColor()},
+    {id: 2, nombre: "Ejemplo 3", color: getRandomColor()},
+    {id: 3, nombre: "Ejemplo 4", color: getRandomColor()},
+    {id: 4, nombre: "Ejemplo 5", color: getRandomColor()},
+  ];
 
+  const [participantes, setparticipantes] = useState<Opcion[]>(Ejemplos);
+  const [mostrarBotonX, setMostrarBotonX] = useState<boolean>(true);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const [ganador, setGanador] = useState<Opcion>();
   const [estaGirando, setEstaGirando] = useState<boolean>(false);
 
-  const inputRef = useRef<HTMLTextAreaElement>(null);
-
   function LimpiarNombres() {
     setparticipantes([]);
+    if (!inputRef.current) return;
+    inputRef.current.value = "";
   }
 
   function eliminarParticipante(id: number) {
+    if (!inputRef.current) {
+      return;
+    }
     const nuevoArray = participantes.filter((participante) => participante.id !== id);
+
+    inputRef.current.value = nuevoArray.map((persona) => persona.nombre).join("\n");
 
     setparticipantes(nuevoArray);
   }
@@ -53,6 +66,9 @@ export default function HomePage() {
       {id: 11, nombre: "Lato", color: getRandomColor()},
     ];
 
+    if (inputRef.current) {
+      inputRef.current.value = NombresDeafault.map((persona) => persona.nombre).join("\n");
+    }
     setparticipantes(NombresDeafault);
   }
   //GIRAR
@@ -118,14 +134,13 @@ export default function HomePage() {
       color: getRandomColor(),
     }));
 
-    setparticipantes([...participantes, ...nuevosparticipantes]);
-    inputRef.current.value = "";
+    setparticipantes(nuevosparticipantes);
   };
 
   return (
-    <div className="flex min-h-screen flex-wrap items-center justify-center p-4 md:p-8 lg:flex-nowrap">
+    <div className="flex min-h-screen flex-wrap items-center  justify-center p-4 md:p-8 lg:flex-nowrap">
       <section className="bg- flex w-full flex-1 flex-col rounded-xl p-5 shadow-2xl lg:w-2/3">
-        <section className="mb-4 grid flex-1 grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
+        <section className="mb-4 grid flex-1 grid-cols-2 gap-5 sm:grid-cols-3 ">
           {participantes.map((participante) => (
             <motion.div
               key={participante.id}
@@ -172,17 +187,11 @@ export default function HomePage() {
         <section className="flex flex-col items-center space-y-6">
           <Textarea
             ref={inputRef}
-            className="w-full border p-2 text-lg text-white"
-            placeholder="Nombre del participante"
+            className=" h-48 w-full  border p-4 text-lg text-white"
+            placeholder={`Ejemplo 1\nEjemplo 2\nEjemplo 3\nEjemplo 4\nEjemplo 5`}
+            onChange={AgregarParticipante}
           />
 
-          <button
-            className="w-full rounded bg-cyan-500 px-4 py-2 text-white sm:w-auto"
-            type="button"
-            onClick={AgregarParticipante}
-          >
-            Agregar
-          </button>
           <div className="flex gap-4">
             <button
               className="rounded bg-cyan-500 px-4 py-2 text-white hover:bg-indigo-500"
