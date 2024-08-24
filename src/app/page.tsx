@@ -5,6 +5,7 @@ import {useState, useRef} from "react";
 import Swal from "sweetalert2";
 
 import {Textarea} from "@/components/ui/textarea";
+import {Button} from "@/components/ui/button";
 
 interface Opcion {
   id: number;
@@ -20,11 +21,11 @@ const getRandomColor = (): string => {
 
 export default function HomePage() {
   const Ejemplos: Opcion[] = [
-    {id: 0, nombre: "Ejemplo 1", color: getRandomColor()},
-    {id: 1, nombre: "Ejemplo 2", color: getRandomColor()},
-    {id: 2, nombre: "Ejemplo 3", color: getRandomColor()},
-    {id: 3, nombre: "Ejemplo 4", color: getRandomColor()},
-    {id: 4, nombre: "Ejemplo 5", color: getRandomColor()},
+    {id: 0, nombre: "Ejemplo 1", color: "#EBEBEB"},
+    {id: 1, nombre: "Ejemplo 2", color: "#EBEBEB"},
+    {id: 2, nombre: "Ejemplo 3", color: "#EBEBEB"},
+    {id: 3, nombre: "Ejemplo 4", color: "#EBEBEB"},
+    {id: 4, nombre: "Ejemplo 5", color: "#EBEBEB"},
   ];
 
   const [participantes, setparticipantes] = useState<Opcion[]>(Ejemplos);
@@ -52,18 +53,18 @@ export default function HomePage() {
 
   function PonerDefalut() {
     const NombresDeafault: Opcion[] = [
-      {id: 0, nombre: "Joel", color: getRandomColor()},
-      {id: 1, nombre: "Astrid", color: getRandomColor()},
-      {id: 2, nombre: "Eze", color: getRandomColor()},
-      {id: 3, nombre: "Fran", color: getRandomColor()},
-      {id: 4, nombre: "Facu", color: getRandomColor()},
-      {id: 5, nombre: "Fede", color: getRandomColor()},
-      {id: 6, nombre: "Guada", color: getRandomColor()},
-      {id: 7, nombre: "Guille", color: getRandomColor()},
-      {id: 8, nombre: "Marco", color: getRandomColor()},
-      {id: 9, nombre: "Nico", color: getRandomColor()},
-      {id: 10, nombre: "Lucas", color: getRandomColor()},
-      {id: 11, nombre: "Lato", color: getRandomColor()},
+      {id: 0, nombre: "Joel", color: "#EBEBEB"},
+      {id: 1, nombre: "Astrid", color: "#EBEBEB"},
+      {id: 2, nombre: "Eze", color: "#EBEBEB"},
+      {id: 3, nombre: "Fran", color: "#EBEBEB"},
+      {id: 4, nombre: "Facu", color: "#EBEBEB"},
+      {id: 5, nombre: "Fede", color: "#EBEBEB"},
+      {id: 6, nombre: "Guada", color: "#EBEBEB"},
+      {id: 7, nombre: "Guille", color: "#EBEBEB"},
+      {id: 8, nombre: "Marco", color: "#EBEBEB"},
+      {id: 9, nombre: "Nico", color: "#EBEBEB"},
+      {id: 10, nombre: "Lucas", color: "#EBEBEB"},
+      {id: 11, nombre: "Lato", color: "#EBEBEB"},
     ];
 
     if (inputRef.current) {
@@ -76,7 +77,7 @@ export default function HomePage() {
     setEstaGirando(true);
     let index = Math.floor(Math.random() * participantes.length);
     let velocidad = 20;
-    const incremento = 80;
+    const incremento = 40;
     let parar = false;
 
     const girar = () => {
@@ -131,85 +132,75 @@ export default function HomePage() {
     const nuevosparticipantes: Opcion[] = nombresParticipantes.map((participante, index) => ({
       id: maxid + index + 1,
       nombre: participante,
-      color: getRandomColor(),
+      color: "#EBEBEB",
     }));
 
     setparticipantes(nuevosparticipantes);
   };
 
-  return (
-    <div className="flex p-4 md:p-8">
-      <section className="flex w-full flex-col rounded-xl p-5 shadow-2xl lg:m-5">
-        <section
-          className={`mb-4 grid ${participantes.length > 25 ? "lg:grid-cols-7" : "lg:grid-cols-4"} gap-6 sm:grid-cols-3 md:grid-cols-2 `}
-        >
-          {participantes.map((participante) => (
-            <motion.div
-              key={participante.id}
-              animate={{
-                scale: ganador?.id === participante.id ? 1.1 : 1,
-                backgroundColor: ganador?.id === participante.id ? "#00CADB" : participante.color,
-                boxShadow:
-                  ganador?.id === participante.id ? `0 4px 15px ${participante.color}` : "",
-              }}
-              className="relative flex h-20 items-center justify-center rounded-xl text-lg text-black shadow-xl sm:h-24 sm:w-32"
-              initial={{scale: 1}}
-              style={{backgroundColor: participante.color}}
-              transition={{duration: 0.2}}
-            >
-              {participante.nombre}
-              <button
-                className="absolute right-0 top-0 mr-1 mt-1 rounded-full bg-red-500 px-2 text-xs text-white"
-                hidden={mostrarBotonX}
-                style={{transform: "translate(50%, -50%)"}}
-                type="button"
-                onClick={() => eliminarParticipante(participante.id)}
-              >
-                X
-              </button>
-            </motion.div>
-          ))}
-        </section>
+  function getCols(size: number): string {
+    return "";
+  }
 
-        <div className="flex justify-center">
-          <button
-            className="rounded-xl bg-indigo-800 px-16 py-2 text-white ring hover:bg-cyan-500 focus:ring-indigo-600 sm:px-20"
+  return (
+    <div className="flex h-full">
+      <section className="flex max-h-fit flex-wrap gap-4">
+        {participantes.map((participante) => (
+          <motion.div
+            key={participante.id}
+            animate={{
+              scale: ganador?.id === participante.id ? 1.1 : 1,
+              backgroundColor: ganador?.id === participante.id ? "#7A5AC4" : participante.color,
+              boxShadow: ganador?.id === participante.id ? `0 4px 15px #7A5AC4` : "",
+              color: ganador?.id === participante.id ? "#fff" : "",
+            }}
+            className={`relative flex size-20 items-center justify-center rounded-xl text-xl font-semibold text-black shadow-xl sm:size-24 ${participantes.length > 98 ? "sm:size-20" : "sm:size-24"}`}
+            initial={{scale: 1}}
+            style={{backgroundColor: participante.color}}
+            transition={{duration: 0.2}}
+          >
+            {participante.nombre}
+            <button
+              className="absolute right-0 top-0 mr-1 mt-1 rounded-full bg-red-500 px-3 py-2 text-xs text-white"
+              hidden={mostrarBotonX}
+              style={{transform: "translate(50%, -50%)"}}
+              type="button"
+              onClick={() => eliminarParticipante(participante.id)}
+            >
+              X
+            </button>
+          </motion.div>
+        ))}
+      </section>
+
+      <section className="flex flex-col">
+        <h2 className="mb-4 text-center font-bold">¡Agrega Participantes!</h2>
+        <section className="flex flex-1 flex-col items-center space-y-6">
+          <Textarea
+            ref={inputRef}
+            className="h-full w-full flex-1 resize-none border p-4 text-lg"
+            placeholder={`Ejemplo 1\nEjemplo 2\nEjemplo 3\nEjemplo 4\nEjemplo 5`}
+            onChange={AgregarParticipante}
+          />
+
+          <Button
+            className="rounded-xl px-16 py-2 sm:px-20"
             disabled={estaGirando ? true : participantes.length === 0}
             type="button"
             onClick={ElegirGanador}
           >
             ¡Girar!
-          </button>
-        </div>
-      </section>
-
-      <section className="mt-8 w-full rounded-lg bg-indigo-950 p-5 shadow-xl lg:mt-0 lg:h-max lg:w-1/3">
-        <h2 className="mb-4 text-center font-bold text-white">¡Agrega Participantes!</h2>
-        <section className="flex flex-col items-center space-y-6">
-          <Textarea
-            ref={inputRef}
-            className=" h-48 w-full  border p-4 text-lg text-white"
-            placeholder={`Ejemplo 1\nEjemplo 2\nEjemplo 3\nEjemplo 4\nEjemplo 5`}
-            onChange={AgregarParticipante}
-          />
+          </Button>
 
           <div className="flex gap-4">
-            <button
-              className="rounded bg-cyan-500 px-4 py-2 text-white hover:bg-indigo-500"
-              type="button"
-              onClick={PonerDefalut}
-            >
+            <button className="rounded px-4 py-2" type="button" onClick={PonerDefalut}>
               🕊️
             </button>
-            <button
-              className="rounded bg-cyan-500 px-4 py-2 text-white hover:bg-indigo-500"
-              type="button"
-              onClick={LimpiarNombres}
-            >
+            <button className="rounded px-4 py-2" type="button" onClick={LimpiarNombres}>
               🧹
             </button>
             <button
-              className="rounded bg-cyan-500 px-4 py-2 text-white hover:bg-indigo-500"
+              className="rounded px-4 py-2"
               type="button"
               onClick={() => setMostrarBotonX(!mostrarBotonX)}
             >
